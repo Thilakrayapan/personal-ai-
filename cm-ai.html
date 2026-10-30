@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CM AI - All-in-One Standalone Dashboard</title>
+  <meta name="description" content="Right AI. Right Task. Less Cost. More Learning. Complete all-in-one HTML application.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS CDN for 100% self-contained standalone execution -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      background-color: #f4f7fb;
+      color: #1e293b;
+    }
+    .font-mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    /* Custom clean scrollbars */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+  </style>
+</head>
+<body class="min-h-screen antialiased flex flex-col md:flex-row text-slate-800">
+
+  <!-- ================= SIDEBAR ================= -->
+  <aside class="w-full md:w-64 bg-[#0a1128] text-slate-300 flex flex-col shrink-0 select-none md:sticky md:top-0 md:h-screen z-20">
+    <!-- Brand Lockup -->
+    <div class="flex items-center justify-between px-6 py-5 border-b border-slate-800/60">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-xl bg-blue-600/20 border border-blue-500/30 flex items-center justify-center text-blue-400">
+          <svg class="w-5 h-5 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 4.44-2.04"/>
+            <path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-4.44-2.04"/>
+          </svg>
+        </div>
+        <span class="text-xl font-bold tracking-tight text-white">CM AI</span>
+      </div>
+    </div>
+
+    <!-- Navigation Menu Items -->
+    <nav class="flex-1 py-5 px-3 space-y-1 overflow-y-auto" id="sidebar-nav">
+      <button onclick="switchView('dashboard')" data-nav="dashboard" class="nav-btn w-full flex items-center gap-3.5 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all bg-blue-600 text-white shadow-sm shadow-blue-500/20">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+        <span>Dashboard</span>
+      </button>
+
+      <button onclick="switchView('newTask')" data-nav="newTask" class="nav-btn w-full flex items-center gap-3.5 px-4 py-2.5 rounded-xl text-sm font-medium transition-all text-slate-400 hover:text-white hover:bg-slate-800/50">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v8"/><path d="M8 12h8"/></svg>
+        <span>New Task</span>
+      </button>
+
+      <button onclick="switchView('recommendations')" data-nav="recommendations" class="nav-btn w-full flex items-center gap-3.5 px-4 py-2.5 rounded-xl text-sm font-medium transition-all text-slate-400 hover:text-white hover:bg-slate-800/50">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>
+        <span>Recommendations</span>
+      </button>
+
+      <button onclick="switchView('usageCost')" data-nav="usageCost" class="nav-btn w-full flex items-center gap-3.5 px-4 py-2.5 rounded-xl text-sm font-medium transition-all text-slate-400 hover:text-white hover:bg-slate-800/50">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+        <span>Usage & Cost</span>
+      </button>
+
+      <button onclick="switchView('learningMode')" data-nav="learningMode" class="nav-btn w-full flex items-center gap-3.5 px-4 py-2.5 rounded-xl text-sm font-medium transition-all text-slate-400 hover:text-white hover:bg-slate-800/50">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.42 10.922a1 1 0 0 0-.019-.838L12.83 3.18a2 2 0 0 0-1.66 0L2.6 10.084a1 1 0 0 0 0 1.832l8.57 6.908a2 2 0 0 0 1.66 0l8.57-6.908a1 1 0 0 0 .02-.994Z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/></svg>
+        <span>Learning Mode</span>
+      </button>
+
+      <button onclick="switchView('profile')" data-nav="profile" class="nav-btn w-full flex items-center gap-3.5 px-4 py-2.5 rounded-xl text-sm font-medium transition-all text-slate-400 hover:text-white hover:bg-slate-800/50">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 1 0-16 0"/></svg>
+        <span>Profile</span>
+      </button>
+
+      <button onclick="switchView('settings')" data-nav="settings" class="nav-btn w-full flex items-center gap-3.5 px-4 py-2.5 rounded-xl text-sm font-medium transition-all text-slate-400 hover:text-white hover:bg-slate-800/50">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        <span>Settings</span>
+      </button>
+    </nav>
+
+    <!-- Composite Reference Switcher -->
+    <div class="px-4 py-3 border-t border-slate-800/60">
+      <button onclick="toggleCompositeLayout()" id="btn-toggle-composite" class="w-full text-left px-3 py-2 rounded-lg text-xs font-medium border border-blue-500/60 bg-blue-950/70 text-blue-300 transition-colors flex items-center justify-between">
+        <span>Reference View (All 5 Screens)</span>
+        <span class="text-[10px] bg-blue-500/30 px-1.5 py-0.5 rounded text-blue-200">Active</span>
+      </button>
+    </div>
+
+    <!-- Tagline Footer -->
+    <div class="p-6 border-t border-slate-800/60 text-[11px] leading-relaxed text-slate-400">
+      <p class="font-semibold text-slate-300">Right AI. Right Task.</p>
+      <p class="text-slate-400">Less Cost. More Learning.</p>
+    </div>
+  </aside>
+
+  <!-- ================= MAIN CONTENT ================= -->
+  <main class="flex-1 flex flex-col min-w-0 pb-12">
+    <!-- Top Header -->
+    <header class="px-4 md:px-8 pt-6 pb-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div>
+        <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight text-slate-900 flex items-center gap-1.5">
+          <span>Hello, Sanjana!</span>
+          <span class="inline-block origin-bottom-right hover:rotate-12 transition-transform">👋</span>
+        </h1>
+        <p class="text-sm text-slate-500 font-medium mt-0.5">Here's your AI usage and insights for this month.</p>
+      </div>
+
+      <div class="flex items-center gap-3 self-end md:self-auto">
+        <!-- Role Selector -->
+        <div class="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-white border border-slate-200 text-xs font-semibold text-slate-700 shadow-xs">
+          <span class="text-blue-600">🎓</span>
+          <select id="user-role-select" onchange="onRoleChange(this.value)" class="bg-transparent focus:outline-none cursor-pointer font-semibold text-slate-700">
+            <option value="Student" selected>Student</option>
+            <option value="Professional">Professional</option>
+            <option value="Developer">Developer</option>
+            <option value="Researcher">Researcher</option>
+          </select>
+        </div>
+
+        <!-- Avatar Pill -->
+        <div class="flex items-center gap-2.5 px-3 py-1.5 rounded-xl bg-white border border-slate-200 shadow-xs">
+          <div class="w-7 h-7 rounded-full bg-[#0a1128] text-white flex items-center justify-center font-bold text-xs">S</div>
+          <span class="text-xs font-semibold text-slate-800">Sanjana</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Top Master Metrics (4 Cards) -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 px-4 md:px-8 mb-6">
+      <!-- 1. AI Requests -->
+      <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-xs flex flex-col justify-between">
+        <div>
+          <div class="flex items-center gap-2 mb-2">
+            <div class="w-8 h-8 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center font-bold">✨</div>
+            <span class="text-xs font-semibold text-slate-500">AI Requests</span>
+          </div>
+          <div class="text-3xl font-extrabold text-slate-900 tracking-tight font-mono" id="val-ai-requests">72</div>
+          <p class="text-xs font-medium text-slate-500 mt-0.5">+12% from last month</p>
+        </div>
+        <div class="mt-4 pt-2">
+          <svg class="w-full h-8" viewBox="0 0 100 24" preserveAspectRatio="none">
+            <path d="M 0,20 Q 15,18 25,12 T 50,15 T 75,6 T 100,10" fill="none" stroke="#3b82f6" stroke-width="2.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- 2. Total Cost -->
+      <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-xs flex flex-col justify-between">
+        <div>
+          <div class="flex items-center gap-2 mb-2">
+            <div class="w-8 h-8 rounded-full bg-orange-50 text-orange-600 flex items-center justify-center font-bold text-xs">₹</div>
+            <span class="text-xs font-semibold text-slate-500">Total Cost</span>
+          </div>
+          <div class="text-3xl font-extrabold text-slate-900 tracking-tight font-mono" id="val-total-cost">₹145</div>
+          <p class="text-xs font-medium text-slate-500 mt-0.5">of ₹500 budget</p>
+        </div>
+        <div class="mt-4 pt-2">
+          <div class="flex items-center justify-between text-[11px] font-semibold text-slate-500 mb-1.5">
+            <div class="w-full bg-slate-100 rounded-full h-2 overflow-hidden mr-3">
+              <div id="bar-budget-progress" class="bg-blue-600 h-2 rounded-full transition-all" style="width: 29%"></div>
+            </div>
+            <span id="text-budget-percent" class="shrink-0 font-mono">29% used</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. Potential Savings -->
+      <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-xs flex flex-col justify-between">
+        <div>
+          <div class="flex items-center gap-2 mb-2">
+            <div class="w-8 h-8 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center">🌱</div>
+            <span class="text-xs font-semibold text-slate-500">Potential Savings</span>
+          </div>
+          <div class="text-3xl font-extrabold text-slate-900 tracking-tight font-mono">₹92</div>
+          <p class="text-xs font-medium text-slate-500 mt-0.5">(approx.)</p>
+        </div>
+        <div class="mt-4 pt-2">
+          <div class="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
+            <div class="bg-emerald-500 h-2 rounded-full" style="width: 65%"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. Most Used -->
+      <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-xs flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <div class="flex items-center gap-2">
+              <div class="w-8 h-8 rounded-full bg-purple-50 text-purple-600 flex items-center justify-center">⚡</div>
+              <span class="text-xs font-semibold text-slate-500">Most Used</span>
+            </div>
+            <div class="w-8 h-8 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-mono font-bold text-xs">&lt;/&gt;</div>
+          </div>
+          <div class="text-2xl font-extrabold text-slate-900 tracking-tight">Coding AI</div>
+          <p class="text-xs font-medium text-slate-500 mt-0.5">(32 requests)</p>
+        </div>
+        <div class="mt-4 pt-2 text-xs text-blue-600 font-semibold">Explore coding tools →</div>
+      </div>
+    </div>
+
+    <!-- Middle 3 Cards Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4 md:px-8 mb-8">
+      <!-- Usage by Category Donut -->
+      <div class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs">
+        <h2 class="text-base font-bold text-slate-900 tracking-tight mb-3">Usage by Category</h2>
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div class="relative shrink-0 flex items-center justify-center">
+            <svg width="148" height="148" class="transform -rotate-90">
+              <circle cx="74" cy="74" r="51" fill="transparent" stroke="#2563eb" stroke-width="22" stroke-dasharray="102 320" stroke-dashoffset="0"/>
+              <circle cx="74" cy="74" r="51" fill="transparent" stroke="#06b6d4" stroke-width="22" stroke-dasharray="67 320" stroke-dashoffset="-102"/>
+              <circle cx="74" cy="74" r="51" fill="transparent" stroke="#f97316" stroke-width="22" stroke-dasharray="54 320" stroke-dashoffset="-169"/>
+              <circle cx="74" cy="74" r="51" fill="transparent" stroke="#d946ef" stroke-width="22" stroke-dasharray="38 320" stroke-dashoffset="-223"/>
+              <circle cx="74" cy="74" r="51" fill="transparent" stroke="#f43f5e" stroke-width="22" stroke-dasharray="59 320" stroke-dashoffset="-261"/>
+            </svg>
+            <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+              <span class="text-2xl font-black text-slate-900 font-mono">72</span>
+              <span class="text-[11px] font-semibold text-slate-400">Total Requests</span>
+            </div>
+          </div>
+          <div class="w-full space-y-1.5 text-xs">
+            <div class="flex items-center justify-between py-0.5"><div class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-[#2563eb]"></span><span>Coding</span></div><span class="font-bold font-mono">32%</span></div>
+            <div class="flex items-center justify-between py-0.5"><div class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-[#06b6d4]"></span><span>Research</span></div><span class="font-bold font-mono">21%</span></div>
+            <div class="flex items-center justify-between py-0.5"><div class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-[#f97316]"></span><span>Writing</span></div><span class="font-bold font-mono">17%</span></div>
+            <div class="flex items-center justify-between py-0.5"><div class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-[#d946ef]"></span><span>Image Generation</span></div><span class="font-bold font-mono">12%</span></div>
+            <div class="flex items-center justify-between py-0.5"><div class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-[#f43f5e]"></span><span>Others</span></div><span class="font-bold font-mono">18%</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Top Recommended Models -->
+      <div class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs flex flex-col justify-between">
+        <h2 class="text-base font-bold text-slate-900 tracking-tight mb-3">Top Recommended Models</h2>
+        <div class="space-y-3">
+          <div class="flex items-center justify-between p-2 rounded-xl hover:bg-slate-50 transition-colors">
+            <div class="flex items-center gap-3">
+              <div class="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold text-xs">🤖</div>
+              <div><p class="text-sm font-bold text-slate-900">ChatGPT</p><p class="text-xs text-slate-500 font-medium">28 requests · 39%</p></div>
+            </div>
+            <span class="text-xs font-semibold px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-100">Best for general tasks</span>
+          </div>
+
+          <div class="flex items-center justify-between p-2 rounded-xl hover:bg-slate-50 transition-colors">
+            <div class="flex items-center gap-3">
+              <div class="w-9 h-9 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-xs">✨</div>
+              <div><p class="text-sm font-bold text-slate-900">Gemini</p><p class="text-xs text-slate-500 font-medium">16 requests · 22%</p></div>
+            </div>
+            <span class="text-xs font-semibold px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-100">Best for research</span>
+          </div>
+
+          <div class="flex items-center justify-between p-2 rounded-xl hover:bg-slate-50 transition-colors">
+            <div class="flex items-center gap-3">
+              <div class="w-9 h-9 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center font-bold text-xs">☀️</div>
+              <div><p class="text-sm font-bold text-slate-900">Claude</p><p class="text-xs text-slate-500 font-medium">12 requests · 17%</p></div>
+            </div>
+            <span class="text-xs font-semibold px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-100">Best for long context</span>
+          </div>
+
+          <div class="flex items-center justify-between p-2 rounded-xl hover:bg-slate-50 transition-colors">
+            <div class="flex items-center gap-3">
+              <div class="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold text-xs">💻</div>
+              <div><p class="text-sm font-bold text-slate-900">GitHub Copilot</p><p class="text-xs text-slate-500 font-medium">8 requests · 11%</p></div>
+            </div>
+            <span class="text-xs font-semibold px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-100">Best for coding</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Activity -->
+      <div class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs flex flex-col justify-between">
+        <div class="flex items-center justify-between mb-3">
+          <h2 class="text-base font-bold text-slate-900 tracking-tight">Recent Activity</h2>
+          <span class="text-xs font-semibold text-blue-600 cursor-pointer">View all →</span>
+        </div>
+        <div class="space-y-3" id="recent-activity-list">
+          <div class="flex items-center justify-between p-2 rounded-xl hover:bg-slate-50 transition-colors">
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center font-mono text-xs">&lt;/&gt;</div>
+              <div><p class="text-sm font-semibold text-slate-900">Debug Python code</p><p class="text-xs text-slate-400">ChatGPT</p></div>
+            </div>
+            <div class="text-right"><p class="text-xs text-slate-400 mb-0.5">2 hours ago</p><span class="text-[11px] font-semibold px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-100">Recommended</span></div>
+          </div>
+
+          <div class="flex items-center justify-between p-2 rounded-xl hover:bg-slate-50 transition-colors">
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-xs">🔍</div>
+              <div><p class="text-sm font-semibold text-slate-900">Research on renewable energy</p><p class="text-xs text-slate-400">Perplexity</p></div>
+            </div>
+            <div class="text-right"><p class="text-xs text-slate-400 mb-0.5">4 hours ago</p><span class="text-[11px] font-semibold px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-100">Recommended</span></div>
+          </div>
+
+          <div class="flex items-center justify-between p-2 rounded-xl hover:bg-slate-50 transition-colors">
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center text-xs">✍️</div>
+              <div><p class="text-sm font-semibold text-slate-900">Write a college essay</p><p class="text-xs text-slate-400">Claude</p></div>
+            </div>
+            <div class="text-right"><p class="text-xs text-slate-400 mb-0.5">1 day ago</p><span class="text-[11px] font-semibold px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-100">Recommended</span></div>
+          </div>
+
+          <div class="flex items-center justify-between p-2 rounded-xl hover:bg-slate-50 transition-colors">
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center text-xs">🎨</div>
+              <div><p class="text-sm font-semibold text-slate-900">Generate image for presentation</p><p class="text-xs text-slate-400">Midjourney</p></div>
+            </div>
+            <div class="text-right"><p class="text-xs text-slate-400 mb-0.5">1 day ago</p><span class="text-[11px] font-semibold px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-100">Recommended</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= ALL 5 ARCHITECTURAL SUB-VIEWS ================= -->
+    <div id="composite-container" class="space-y-8 px-4 md:px-8">
+      <!-- Section Divider -->
+      <div class="border-t-2 border-slate-200/80 pt-6 flex items-center justify-between">
+        <div>
+          <h2 class="text-xl font-black text-slate-900 tracking-tight">Interactive Component Gallery (All 5 Architecture Views)</h2>
+          <p class="text-xs text-slate-500">Live, functional implementations of the sub-screens from the specification.</p>
+        </div>
+        <span class="text-xs font-semibold px-2.5 py-1 bg-blue-100 text-blue-700 rounded-lg">All 5 Views Embedded</span>
+      </div>
+
+      <!-- Row 1: 1. Task Input, 2. AI Recommendation Result, 3. Cost Tracking Dashboard -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+        <!-- SCREEN 1: Task Input -->
+        <div class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-base font-bold text-slate-900">What do you want to do?</h3>
+            <span class="text-xs text-slate-400 font-medium">1. Task Input</span>
+          </div>
+
+          <div class="space-y-4">
+            <div>
+              <textarea id="task-input-text" rows="3" oninput="updateCharCount()" class="w-full rounded-xl border border-slate-200 p-3 text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 focus:outline-none resize-none font-medium text-slate-800">Help me debug this Python code</textarea>
+              <div class="text-right text-xs text-slate-400 font-mono" id="char-counter">30/500</div>
+            </div>
+
+            <div>
+              <span class="text-xs font-semibold text-slate-400 block mb-1.5">Try instant presets:</span>
+              <div class="flex flex-wrap gap-1.5">
+                <button onclick="setPrompt('Help me debug this Python code', 'Coding')" class="text-xs px-2 py-1 rounded-lg bg-slate-50 border border-slate-200 text-slate-600 hover:text-blue-600">Debug Python</button>
+                <button onclick="setPrompt('25 x 40', 'Math/Calculation')" class="text-xs px-2 py-1 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-700 font-mono">25 x 40 (Math)</button>
+                <button onclick="setPrompt('Help me solve this DSA problem: Find the sum of two numbers in a sorted array.', 'Coding')" class="text-xs px-2 py-1 rounded-lg bg-blue-50 border border-blue-200 text-blue-700">DSA Problem</button>
+              </div>
+            </div>
+
+            <div class="pt-2 border-t border-slate-100 grid grid-cols-2 gap-3 text-xs">
+              <div>
+                <label class="block text-slate-500 font-medium mb-1">Task type</label>
+                <select id="task-category-select" class="w-full rounded-xl border border-slate-200 p-2 font-semibold bg-white text-slate-700">
+                  <option value="Coding" selected>Coding</option>
+                  <option value="Research">Research</option>
+                  <option value="Writing">Writing</option>
+                  <option value="Image Generation">Image Generation</option>
+                  <option value="Math/Calculation">Math / Calc</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-slate-500 font-medium mb-1">Budget preference</label>
+                <select id="task-budget-select" class="w-full rounded-xl border border-slate-200 p-2 font-semibold bg-white text-slate-700">
+                  <option value="Low" selected>Low (prefer free)</option>
+                  <option value="Medium">Medium</option>
+                  <option value="High">High capability</option>
+                </select>
+              </div>
+            </div>
+
+            <button onclick="routeTask()" class="w-full py-2.5 px-4 rounded-xl bg-blue-600 text-white font-semibold text-xs hover:bg-blue-700 transition-colors shadow-xs flex items-center justify-center gap-2 cursor-pointer">
+              <span>Get Recommendation</span>
+              <span>→</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- SCREEN 2: AI Recommendation Result -->
+        <div class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs space-y-4">
+          <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+            <h3 class="text-sm font-bold text-slate-800">2. AI Recommendation Result</h3>
+            <span class="text-xs text-slate-400 font-medium">Task Analysis</span>
+          </div>
+
+          <!-- Analysis Details -->
+          <div class="grid grid-cols-4 gap-2 text-xs bg-slate-50 p-2.5 rounded-xl">
+            <div><span class="text-slate-400 block text-[11px]">Task</span><span id="analysis-task-label" class="font-bold text-slate-800 truncate block">Debug Python</span></div>
+            <div><span class="text-slate-400 block text-[11px]">Category</span><span id="analysis-category-label" class="font-bold text-slate-800 block">Coding</span></div>
+            <div><span class="text-slate-400 block text-[11px]">User</span><span id="analysis-user-label" class="font-bold text-slate-800 block">Student</span></div>
+            <div><span class="text-slate-400 block text-[11px]">AI Required</span><span id="analysis-ai-label" class="font-bold text-emerald-600 block">Yes</span></div>
+          </div>
+
+          <!-- Model 1 (ChatGPT) -->
+          <div class="border border-blue-400 rounded-xl p-4 ring-2 ring-blue-500/10 space-y-3">
+            <div class="flex items-start justify-between">
+              <div class="flex items-center gap-2">
+                <span class="w-5 h-5 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-[11px]">1</span>
+                <span class="font-bold text-slate-900 text-sm">ChatGPT</span>
+                <span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 border border-emerald-200">Best Overall Choice</span>
+              </div>
+              <span class="text-red-400 font-mono text-xs cursor-pointer">✕</span>
+            </div>
+            <p class="text-xs text-slate-500">Great for code debugging, explanations and support.</p>
+            <div class="grid grid-cols-4 gap-2 text-xs bg-slate-50 p-2 rounded-lg font-medium">
+              <div><span class="text-slate-400 block text-[10px]">Quality</span><span>⭐ 5/5</span></div>
+              <div><span class="text-slate-400 block text-[10px]">Speed</span><span>⚡ 4/5</span></div>
+              <div><span class="text-slate-400 block text-[10px]">Cost</span><span class="text-emerald-700 font-bold">Free</span></div>
+              <div><span class="text-slate-400 block text-[10px]">Privacy</span><span>🛡️ 4/5</span></div>
+            </div>
+            <button onclick="simulateExecution('ChatGPT')" class="w-full py-2 rounded-lg bg-blue-600 text-white font-semibold text-xs hover:bg-blue-700 transition-colors">Use This Model</button>
+          </div>
+
+          <!-- Model 2 (Claude) -->
+          <div class="border border-slate-200 rounded-xl p-4 space-y-3">
+            <div class="flex items-center gap-2">
+              <span class="w-5 h-5 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center font-bold text-[11px]">2</span>
+              <span class="font-bold text-slate-900 text-sm">Claude</span>
+            </div>
+            <p class="text-xs text-slate-500">Good for long explanations and complex logic.</p>
+            <div class="grid grid-cols-4 gap-2 text-xs bg-slate-50 p-2 rounded-lg font-medium">
+              <div><span class="text-slate-400 block text-[10px]">Quality</span><span>⭐ 5/5</span></div>
+              <div><span class="text-slate-400 block text-[10px]">Speed</span><span>⚡ 4/5</span></div>
+              <div><span class="text-slate-400 block text-[10px]">Cost</span><span class="text-slate-800 font-bold">₹ ₹</span></div>
+              <div><span class="text-slate-400 block text-[10px]">Privacy</span><span>🛡️ 4/5</span></div>
+            </div>
+            <button onclick="simulateExecution('Claude')" class="w-full py-1.5 rounded-lg border border-slate-200 text-slate-700 font-semibold text-xs hover:bg-slate-50">Select Claude</button>
+          </div>
+        </div>
+
+        <!-- SCREEN 3: Cost Tracking Dashboard -->
+        <div class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs space-y-4">
+          <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+            <div>
+              <h3 class="text-sm font-bold text-slate-900">Usage & Cost</h3>
+              <p class="text-[11px] text-slate-400">3. Cost Tracking Dashboard</p>
+            </div>
+            <button onclick="exportCSV()" class="px-2.5 py-1 rounded-lg border border-slate-200 text-xs font-semibold text-slate-600 hover:bg-slate-50">Export CSV</button>
+          </div>
+
+          <div class="grid grid-cols-3 gap-2 text-center text-xs">
+            <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+              <span class="text-slate-400 block text-[10px]">Total Spent</span>
+              <span class="font-extrabold text-slate-900 font-mono text-base" id="stat-spent">₹145</span>
+              <div class="w-full bg-slate-200 rounded-full h-1 mt-1.5"><div class="bg-blue-600 h-1 rounded-full" style="width: 29%"></div></div>
+            </div>
+
+            <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+              <span class="text-slate-400 block text-[10px]">Total Requests</span>
+              <span class="font-extrabold text-slate-900 font-mono text-base">42</span>
+              <span class="text-[10px] text-emerald-600 block mt-1">+8%</span>
+            </div>
+
+            <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+              <span class="text-slate-400 block text-[10px]">Potential Saving</span>
+              <span class="font-extrabold text-slate-900 font-mono text-base">₹92</span>
+              <div class="w-full bg-slate-200 rounded-full h-1 mt-1.5"><div class="bg-emerald-500 h-1 rounded-full" style="width: 65%"></div></div>
+            </div>
+          </div>
+
+          <!-- Spending by Model Horizontal Bars -->
+          <div class="space-y-2 pt-2 text-xs">
+            <span class="font-bold text-slate-800 block text-xs">Spending by Model</span>
+            <div class="space-y-1.5">
+              <div><div class="flex justify-between text-[11px] mb-0.5"><span>ChatGPT</span><span class="font-mono">₹68</span></div><div class="w-full bg-slate-100 rounded-md h-3"><div class="bg-blue-500 h-3 rounded-md" style="width: 100%"></div></div></div>
+              <div><div class="flex justify-between text-[11px] mb-0.5"><span>Gemini</span><span class="font-mono">₹32</span></div><div class="w-full bg-slate-100 rounded-md h-3"><div class="bg-blue-400 h-3 rounded-md" style="width: 47%"></div></div></div>
+              <div><div class="flex justify-between text-[11px] mb-0.5"><span>Claude</span><span class="font-mono">₹21</span></div><div class="w-full bg-slate-100 rounded-md h-3"><div class="bg-indigo-400 h-3 rounded-md" style="width: 31%"></div></div></div>
+              <div><div class="flex justify-between text-[11px] mb-0.5"><span>Copilot</span><span class="font-mono">₹12</span></div><div class="w-full bg-slate-100 rounded-md h-3"><div class="bg-purple-400 h-3 rounded-md" style="width: 18%"></div></div></div>
+              <div><div class="flex justify-between text-[11px] mb-0.5"><span>Midjourney</span><span class="font-mono">₹8</span></div><div class="w-full bg-slate-100 rounded-md h-3"><div class="bg-fuchsia-400 h-3 rounded-md" style="width: 12%"></div></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 2: 4. Learning Mode Example & 5. AI Not Needed Example -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+        <!-- SCREEN 4: Learning Mode Example -->
+        <div class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs space-y-4">
+          <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+            <div class="flex items-center gap-2">
+              <span class="text-blue-600">✨</span>
+              <h3 class="text-sm font-bold text-slate-900">Learning Mode</h3>
+              <span class="text-[10px] text-slate-400">4. Example</span>
+            </div>
+            <!-- Toggle Switch -->
+            <button onclick="toggleLearningMode()" class="flex items-center gap-2 text-xs font-semibold text-slate-600">
+              <span id="learning-status-text">Active</span>
+              <div id="learning-toggle-bg" class="w-10 h-5 bg-blue-600 rounded-full p-0.5 cursor-pointer flex items-center justify-end">
+                <div class="w-4 h-4 bg-white rounded-full shadow-xs"></div>
+              </div>
+            </button>
+          </div>
+
+          <p class="text-xs text-slate-500">Get <span class="text-emerald-600 font-semibold underline">step-by-step</span> guidance instead of direct answers.</p>
+
+          <!-- Chat Guidance Box -->
+          <div class="space-y-3 text-xs" id="learning-chat-box">
+            <div class="flex justify-end">
+              <div class="bg-blue-50 text-blue-900 p-3 rounded-2xl max-w-[85%] border border-blue-200/60 font-medium">
+                Help me solve this DSA problem: Find the sum of two numbers in a sorted array.
+              </div>
+            </div>
+
+            <div class="flex justify-start">
+              <div class="bg-slate-50 text-slate-800 p-3.5 rounded-2xl max-w-[90%] border border-slate-200/70 space-y-2 leading-relaxed" id="learning-assistant-msg">
+                <p class="font-bold text-slate-900">Great! Let's solve this step by step.</p>
+                <p><strong>Step 1: Understand the problem</strong><br>You need to find two numbers in a sorted array that add up to a target value.</p>
+                <p><strong>Step 2: Think about the approach</strong><br>Can you think of a way to do this efficiently using the sorted property?</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Dynamic Hint Box -->
+          <div id="hint-display" class="hidden p-3 bg-amber-50 border border-amber-200 rounded-xl text-amber-900 text-xs">
+            <strong>Hint:</strong> Maintain two pointers: one at index 0 (left) and one at index N-1 (right). Notice what moving either does to the sum!
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="flex items-center gap-2 pt-2">
+            <button onclick="showHint()" class="px-3 py-1.5 rounded-xl border border-slate-200 text-xs font-semibold hover:bg-slate-50">Show Hint</button>
+            <button onclick="nextStep()" class="px-4 py-1.5 rounded-xl bg-blue-600 text-white text-xs font-semibold hover:bg-blue-700">Next Step →</button>
+            <button onclick="showSolution()" class="px-3 py-1.5 rounded-xl border border-slate-200 text-xs font-semibold hover:bg-slate-50">Show Solution</button>
+          </div>
+        </div>
+
+        <!-- SCREEN 5: "AI Not Needed" Example -->
+        <div class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs space-y-4">
+          <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+            <h3 class="text-sm font-bold text-slate-900">5. "AI Not Needed" Example</h3>
+            <span class="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-100">Smart Router Protection</span>
+          </div>
+
+          <!-- Green Header Banner -->
+          <div class="p-4 rounded-xl bg-emerald-50/80 border border-emerald-100 flex items-start gap-3">
+            <div class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold">🌱</div>
+            <div>
+              <h4 class="text-sm font-bold text-emerald-900">AI Not Required</h4>
+              <p class="text-xs text-emerald-700 mt-0.5">This is a simple calculation. You can use a calculator instead.</p>
+            </div>
+          </div>
+
+          <!-- Task vs Answer -->
+          <div class="grid grid-cols-2 gap-4">
+            <div class="bg-slate-50 p-4 rounded-xl border border-slate-200/70">
+              <span class="text-xs font-medium text-slate-400 block mb-1">Task</span>
+              <div class="text-base font-bold text-slate-900 font-mono" id="not-needed-task">↓ 25 x 40</div>
+            </div>
+            <div class="bg-emerald-50/50 p-4 rounded-xl border border-emerald-200">
+              <span class="text-xs font-medium text-emerald-600 block mb-1">Answer</span>
+              <div class="text-lg font-black text-slate-900 font-mono flex items-center gap-1.5" id="not-needed-answer">
+                <span class="text-emerald-500">✓</span> 1000
+              </div>
+            </div>
+          </div>
+
+          <!-- Recommended Tool & Tip -->
+          <div class="grid grid-cols-2 gap-4 pt-1 items-center">
+            <div class="p-3 bg-slate-50 rounded-xl border border-slate-200/70 flex items-center gap-3">
+              <div class="w-9 h-9 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold">🧮</div>
+              <div>
+                <p class="text-xs font-bold text-slate-900">Calculator</p>
+                <p class="text-[11px] text-slate-500">Fast • Free • Accurate</p>
+              </div>
+            </div>
+
+            <div class="p-3 bg-emerald-50 rounded-xl border border-emerald-200 text-xs text-emerald-900">
+              <p class="font-bold text-[11px]">Using AI for this task is unnecessary.</p>
+              <p class="text-emerald-700 text-[11px]">You can save tokens, time and cost!</p>
+            </div>
+          </div>
+
+          <!-- Instant Evaluator -->
+          <div class="pt-2 border-t border-slate-100 flex items-center gap-2">
+            <input type="text" id="calc-input" placeholder="Try e.g. 500 / 25 or 99 * 3" value="25 x 40" oninput="evalCalculation(this.value)" class="flex-1 rounded-xl border border-slate-200 p-2 text-xs font-mono text-slate-800">
+            <button onclick="evalCalculation(document.getElementById('calc-input').value)" class="px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold">Test</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- ================= JAVASCRIPT ================= -->
+  <script>
+    // State
+    let currentRole = 'Student';
+    let isComposite = true;
+    let stepCount = 2;
+    let totalRequests = 72;
+    let totalCost = 145;
+
+    function updateCharCount() {
+      const text = document.getElementById('task-input-text').value;
+      document.getElementById('char-counter').textContent = text.length + '/500';
+    }
+
+    function setPrompt(prompt, cat) {
+      document.getElementById('task-input-text').value = prompt;
+      document.getElementById('task-category-select').value = cat;
+      updateCharCount();
+      routeTask();
+    }
+
+    function onRoleChange(role) {
+      currentRole = role;
+      document.getElementById('analysis-user-label').textContent = role;
+    }
+
+    function routeTask() {
+      const prompt = document.getElementById('task-input-text').value.trim();
+      const cat = document.getElementById('task-category-select').value;
+
+      document.getElementById('analysis-task-label').textContent = prompt;
+      document.getElementById('analysis-category-label').textContent = cat;
+
+      // Check math / AI not needed
+      const mathMatch = prompt.match(/^(\d+)\s*([\+\-\*\/x×])\s*(\d+)$/i);
+      if (mathMatch) {
+        const n1 = parseFloat(mathMatch[1]);
+        const op = mathMatch[2].toLowerCase();
+        const n2 = parseFloat(mathMatch[3]);
+        let ans = 0;
+        if (op === '+' ) ans = n1 + n2;
+        if (op === '-' ) ans = n1 - n2;
+        if (op === '*' || op === 'x' || op === '×') ans = n1 * n2;
+        if (op === '/') ans = n2 !== 0 ? (n1 / n2) : 'Error';
+
+        document.getElementById('analysis-ai-label').textContent = 'No';
+        document.getElementById('not-needed-task').textContent = '↓ ' + prompt;
+        document.getElementById('not-needed-answer').innerHTML = '<span class="text-emerald-500">✓</span> ' + ans;
+        document.getElementById('calc-input').value = prompt;
+      } else {
+        document.getElementById('analysis-ai-label').textContent = 'Yes';
+      }
+    }
+
+    function evalCalculation(expr) {
+      const trimmed = expr.trim();
+      document.getElementById('not-needed-task').textContent = '↓ ' + trimmed;
+      const match = trimmed.match(/^(\d+)\s*([\+\-\*\/x×])\s*(\d+)$/i);
+      if (match) {
+        const n1 = parseFloat(match[1]);
+        const op = match[2].toLowerCase();
+        const n2 = parseFloat(match[3]);
+        let ans = 0;
+        if (op === '+' ) ans = n1 + n2;
+        if (op === '-' ) ans = n1 - n2;
+        if (op === '*' || op === 'x' || op === '×') ans = n1 * n2;
+        if (op === '/') ans = n2 !== 0 ? (n1 / n2) : 'Error';
+        document.getElementById('not-needed-answer').innerHTML = '<span class="text-emerald-500">✓</span> ' + ans;
+      }
+    }
+
+    function simulateExecution(modelName) {
+      totalRequests += 1;
+      document.getElementById('val-ai-requests').textContent = totalRequests;
+      alert(`[CM AI Simulation] Task processed with ${modelName}!\nZero latency, verified answer.`);
+    }
+
+    function showHint() {
+      const hint = document.getElementById('hint-display');
+      hint.classList.toggle('hidden');
+    }
+
+    function nextStep() {
+      stepCount++;
+      const msg = document.getElementById('learning-assistant-msg');
+      if (stepCount === 3) {
+        msg.innerHTML += '<p class="pt-2 border-t border-slate-200/60"><strong>Step 3: Two-Pointer Rule</strong><br>Calculate sum = arr[left] + arr[right]. If sum &lt; target, left++. If sum &gt; target, right--. This achieves O(n) linear time with O(1) space!</p>';
+      } else if (stepCount === 4) {
+        msg.innerHTML += '<p class="pt-2 border-t border-slate-200/60 text-emerald-700"><strong>Success!</strong><br>You solved the problem algorithmically without spoiling the code implementation!</p>';
+      }
+    }
+
+    function showSolution() {
+      const msg = document.getElementById('learning-assistant-msg');
+      msg.innerHTML += '<div class="p-2 bg-slate-900 text-emerald-400 font-mono text-[11px] rounded-lg mt-2">def twoSum(arr, target):<br>&nbsp;&nbsp;l, r = 0, len(arr)-1<br>&nbsp;&nbsp;while l &lt; r:<br>&nbsp;&nbsp;&nbsp;&nbsp;s = arr[l] + arr[r]<br>&nbsp;&nbsp;&nbsp;&nbsp;if s == target: return [l+1, r+1]<br>&nbsp;&nbsp;&nbsp;&nbsp;elif s &lt; target: l += 1<br>&nbsp;&nbsp;&nbsp;&nbsp;else: r -= 1<br>&nbsp;&nbsp;return []</div>';
+    }
+
+    function toggleLearningMode() {
+      const bg = document.getElementById('learning-toggle-bg');
+      const text = document.getElementById('learning-status-text');
+      if (bg.classList.contains('bg-blue-600')) {
+        bg.classList.replace('bg-blue-600', 'bg-slate-300');
+        bg.classList.replace('justify-end', 'justify-start');
+        text.textContent = 'Off';
+      } else {
+        bg.classList.replace('bg-slate-300', 'bg-blue-600');
+        bg.classList.replace('justify-start', 'justify-end');
+        text.textContent = 'Active';
+      }
+    }
+
+    function exportCSV() {
+      const csv = 'Model,Spent(INR),Requests\\nChatGPT,68,28\\nGemini,32,16\\nClaude,21,12\\nCopilot,12,8\\nMidjourney,8,4';
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'CM_AI_Cost_Report.csv';
+      a.click();
+    }
+
+    function switchView(tabKey) {
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        if (btn.getAttribute('data-nav') === tabKey) {
+          btn.className = 'nav-btn w-full flex items-center gap-3.5 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all bg-blue-600 text-white shadow-sm shadow-blue-500/20';
+        } else {
+          btn.className = 'nav-btn w-full flex items-center gap-3.5 px-4 py-2.5 rounded-xl text-sm font-medium transition-all text-slate-400 hover:text-white hover:bg-slate-800/50';
+        }
+      });
+      // Scroll to relevant section in gallery
+      const el = document.getElementById('composite-container');
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function toggleCompositeLayout() {
+      const btn = document.getElementById('btn-toggle-composite');
+      const el = document.getElementById('composite-container');
+      if (el.style.display === 'none') {
+        el.style.display = 'block';
+        btn.querySelector('span:last-child').textContent = 'Active';
+      } else {
+        el.style.display = 'none';
+        btn.querySelector('span:last-child').textContent = 'Hidden';
+      }
+    }
+  </script>
+</body>
+</html>

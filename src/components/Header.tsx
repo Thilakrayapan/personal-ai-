@@ -56,6 +56,17 @@ export const Header: React.FC<HeaderProps> = ({
 
         {/* Right Controls: Role pill & Avatar pill */}
         <div className="flex items-center gap-3 self-end md:self-auto">
+          {/* Download Standalone Single HTML File */}
+          <a
+            href="./cm-ai.html"
+            download="cm-ai.html"
+            className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold border border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 transition-all shadow-xs"
+            title="Download 100% self-contained single HTML file with embedded CSS and JS"
+          >
+            <span>Single HTML</span>
+            <span className="text-[10px] bg-emerald-200/60 px-1.5 py-0.2 rounded font-mono">.html</span>
+          </a>
+
           {/* View mode toggle */}
           <button
             onClick={onToggleViewMode}
