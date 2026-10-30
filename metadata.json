@@ -1,0 +1,6 @@
+{
+  "name": "CM AI - AI Task & Cost Router",
+  "description": "Right AI. Right Task. Less Cost. More Learning. Intelligent AI model recommendation, cost tracking, and Socratic learning mode for students and professionals.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
